@@ -1,36 +1,51 @@
-import SpriteSheet from './SpriteSheet.js'
-import { loadImage, loadLevel } from './loaders.js'
-
-function drawBackground(background, context, sprites) {
-  background.ranges.forEach(([x1, x2, y1, y2]) => {
-    for (let x = x1; x < x2; ++x) {
-      for (let y = y1; y < y2; ++y) {
-        sprites.drawTile(background.tile, context, x, y)
-      }
-    }
-  })
-}
-
-function loadBackground() {
-  return loadImage('/img/tiles.png')
-  .then(image => {
-    const sprites = new SpriteSheet(image, 16, 16);
-    sprites.define('ground', 0, 0);
-    sprites.define('sky', 10, 7);
-    return sprites;
-  });
-}
+import { loadLevel } from './loaders.js'
+import { loadBackgroundSprite } from './Sprite.js'
+import Compositor from './Compositor.js'
+import { createBackgrounLayer, createSpriteLayer } from './Layers.js'
+import { createMario } from './Entities.js'
+import Timer from './Timer.js'
+import KeyboardStaste from './KeyboardStaste.js'
 
 const canvas = document.getElementById('screen');
 const context = canvas.getContext('2d');
 
-
 Promise.all([
-  loadBackground(),
+  createMario(),
+  loadBackgroundSprite(),
   loadLevel('1-1')
-]).then(([sprites, level]) => {
-  level.backgrounds.forEach(background => {
-    console.log(background)
-    drawBackground(background, context, sprites)
+]).then(([mario, backgroundSprites, level]) => {
+  const comp = new Compositor()
+  const backgroundLayer = createBackgrounLayer(level.backgrounds, backgroundSprites)
+  comp.layers.push(backgroundLayer)
+
+  const spriteLayer = createSpriteLayer(mario);
+  comp.layers.push(spriteLayer);
+
+  
+  const gravity = 2000;
+  mario.pos.set(64, 180);
+
+  const SPACE = 32
+  const input = new KeyboardStaste();
+  input.addMapping(32, keyStates => {
+    console.log(keyStates)
+    if (keyStates) {
+      mario.jump.start();
+    } else {
+      mario.jump.cancel();
+    }
+    
   })
+
+  input.listenTo(window);
+
+  const timer = new Timer();
+  timer.update = function(deltaTime) {
+    mario.update(deltaTime);
+    comp.draw(context);
+    mario.vel.y += gravity * deltaTime;
+  }
+  
+
+  timer.start();
 })
