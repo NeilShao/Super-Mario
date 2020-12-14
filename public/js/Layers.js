@@ -10,8 +10,8 @@ function drawBackground(background, context, sprites) {
 
 export function createBackgrounLayer(level, sprites) {
     const buffer = document.createElement('canvas');
-    buffer.width = 256;
-    buffer.height = 256;
+    buffer.width = 512;
+    buffer.height = 512;
 
     level.tiles.grid.forEach((row, x) => {
         row.forEach((tile, y) => {
@@ -19,16 +19,51 @@ export function createBackgrounLayer(level, sprites) {
         }) 
     })
     
-
     return function(context) {
         context.drawImage(buffer, 0, 0);
     }
 }
   
-export  function createSpriteLayer(entities) {
+export function createSpriteLayer(entities) {
     return function(context) {
         entities.forEach(entity => {
             entity.draw(context);
         })
+    }
+}
+
+export function createCollisionLayer(level) {
+    const resovleTiles = [];
+
+    const tileResolver = level.tilesCollider.tiles;
+    const tileSize = tileResolver.tileSize;
+
+    const getByIndexOriginal = tileResolver.getByIndex;
+    tileResolver.getByIndex = function(x, y) {
+        resovleTiles.push({x, y})
+        return getByIndexOriginal.call(tileResolver, x, y);
+    }
+
+    return function drawCollision(context) {
+        context.strokeStyle = 'blue';
+        resovleTiles.forEach(({x, y}) => {
+            context.beginPath();
+            context.rect(
+                x * tileSize,
+                y * tileSize,
+                tileSize, tileSize);
+            context.stroke();
+        })
+
+        context.strokeStyle = 'green';
+        level.entities.forEach(entity => {
+            context.beginPath();
+            context.rect(
+                entity.pos.x,  entity.pos.y, 
+                entity.size.x, entity.size.y);
+            context.stroke();
+        })
+
+        resovleTiles.length = 0;
     }
 }

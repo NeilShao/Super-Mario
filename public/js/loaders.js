@@ -1,6 +1,6 @@
 import Level from './Level.js'
 import { loadBackgroundSprite } from './Sprite.js'
-import { createBackgrounLayer, createSpriteLayer } from './Layers.js'
+import { createBackgrounLayer, createSpriteLayer, createCollisionLayer } from './Layers.js'
 
 export function loadImage(url) {
     return new Promise(resolve => {
@@ -43,6 +43,9 @@ export function loadLevel(name) {
 
         const spriteLayer = createSpriteLayer(level.entities);
         level.comp.layers.push(spriteLayer);
+
+        const collisionLayer = createCollisionLayer(level);
+        level.comp.layers.push(collisionLayer);
 
         return level;
     })
