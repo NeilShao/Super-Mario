@@ -83,7 +83,7 @@ export default class TileCollider {
                 return;
             } 
     
-            if (match.tile.name !== 'ground') {
+            if (match.tile.behavior !== 'ground') {
                 return;
             }
 
@@ -103,7 +103,6 @@ export default class TileCollider {
     }
 
     checkY(entity) {
-        debugger
         let y;
         if (entity.vel.y > 0) {
             y = entity.pos.y + entity.size.y;
@@ -122,7 +121,7 @@ export default class TileCollider {
                 return;
             } 
     
-            if (match.tile.name !== 'ground') {
+            if (match.tile.behavior !== 'ground') {
                 return;
             }
     

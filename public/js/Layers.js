@@ -1,33 +1,62 @@
-function drawBackground(background, context, sprites) {
-    background.ranges.forEach(([x1, x2, y1, y2]) => {
-      for (let x = x1; x < x2; ++x) {
-        for (let y = y1; y < y2; ++y) {
-          sprites.drawTile(background.tile, context, x, y);
-        }
-      }
-    })
-  }
-
 export function createBackgrounLayer(level, sprites) {
-    const buffer = document.createElement('canvas');
-    buffer.width = 512;
-    buffer.height = 512;
+    const tiles = level.tiles;
+    const resolver = level.tilesCollider.tiles;
 
-    level.tiles.grid.forEach((row, x) => {
-        row.forEach((tile, y) => {
-            sprites.drawTile(tile.name, buffer.getContext('2d'), x, y);
-        }) 
-    })
-    
-    return function(context) {
-        context.drawImage(buffer, 0, 0);
+    const buffer = document.createElement('canvas');
+    buffer.width = 256 + 16;
+    buffer.height = 248;
+    const bufferContext = buffer.getContext('2d');
+
+    let startIndex, endIndex;
+    function redraw(drawFrom, drawTo) {
+        for (let x = drawFrom; x <= drawTo; ++x) {
+            if (startIndex === drawFrom && endIndex === drawTo) {
+                // return;
+            }
+
+            const col = tiles.grid[x];
+            if (col) {
+                col.forEach((tile, y) => {
+                    if (sprites.animations.has(tile.name)) {
+                        sprites.drawAnimationTile(tile.name, bufferContext, x - drawFrom, y, level.totalTime);
+                    } else {
+                        sprites.drawTile(tile.name, bufferContext, x - drawFrom, y);
+                    }
+                }) 
+            }
+        }
+
+        startIndex = drawFrom;
+        endIndex = drawTo;
+    }
+
+    return function(context, camera) {
+        const drawWidth = resolver.toIndex(camera.size.x);
+        const drawFrom = resolver.toIndex(camera.pos.x);
+        const drawTo = drawFrom + drawWidth;
+        redraw(drawFrom, drawTo);
+
+        context.drawImage(buffer, 
+            -camera.pos.x % 16, 
+            -camera.pos.y);
     }
 }
   
-export function createSpriteLayer(entities) {
-    return function(context) {
+export function createSpriteLayer(entities, width = 64, height = 64) {
+    const spriteBuffer = document.createElement('canvas');
+    spriteBuffer.width = width;
+    spriteBuffer.height = height;
+    const spriteContext = spriteBuffer.getContext('2d');
+    
+    return function(context, camera) {
         entities.forEach(entity => {
-            entity.draw(context);
+            spriteContext.clearRect(0, 0, width, height);
+            entity.draw(spriteContext);
+            context.drawImage(
+                spriteBuffer,
+                entity.pos.x - camera.pos.x,
+                entity.pos.y - camera.pos.y
+            );
         })
     }
 }
@@ -44,13 +73,13 @@ export function createCollisionLayer(level) {
         return getByIndexOriginal.call(tileResolver, x, y);
     }
 
-    return function drawCollision(context) {
+    return function drawCollision(context, camera) {
         context.strokeStyle = 'blue';
         resovleTiles.forEach(({x, y}) => {
             context.beginPath();
             context.rect(
-                x * tileSize,
-                y * tileSize,
+                x * tileSize - camera.pos.x,
+                y * tileSize - camera.pos.y,
                 tileSize, tileSize);
             context.stroke();
         })
@@ -59,11 +88,26 @@ export function createCollisionLayer(level) {
         level.entities.forEach(entity => {
             context.beginPath();
             context.rect(
-                entity.pos.x,  entity.pos.y, 
-                entity.size.x, entity.size.y);
+                entity.pos.x - camera.pos.x,  
+                entity.pos.y - camera.pos.y, 
+                entity.size.x, 
+                entity.size.y);
             context.stroke();
         })
 
         resovleTiles.length = 0;
+    }
+}
+
+export function createCameraLayer(cameraToDraw) {
+    return function drawCameraRect(context, fromCamera) {
+        context.strokeStyle = 'purple';
+        context.beginPath();
+        context.rect(
+            cameraToDraw.pos.x - fromCamera.pos.x,  
+            cameraToDraw.pos.y - fromCamera.pos.y, 
+            cameraToDraw.size.x, 
+            cameraToDraw.size.y);
+        context.stroke();
     }
 }

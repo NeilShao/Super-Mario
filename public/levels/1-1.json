@@ -1,26 +1,207 @@
 {
+  "spriteSheet": "overworld",
   "backgrounds": [
     {
-      "tile": "sky",
+      "style": "sky",
       "ranges": [
-        [
-          0, 25,
-          0, 14
-        ]
+          [0, 212, 0, 15]
       ]
     },
     {
-      "tile": "ground",
+      "style": "ground",
+      "behavior": "ground",
       "ranges": [
-        [
-          0, 25,
-          12, 14
-        ],
-        [
-          4, 7,
-          9, 10
-        ]
+          [0, 69, 13, 2],
+          [71, 15, 13, 2],
+          [89, 64, 13, 2],
+          [155, 57, 13, 2]
       ]
-    }
+    },
+    {
+      "style": "cloud",
+      "ranges": [
+          [8, 3],
+          [19, 2],
+          [56, 3],
+          [67, 2],
+          [104, 3],
+          [115, 2],
+          [152, 3],
+          [163, 2],
+          [200, 3]
+      ]
+  },
+  {
+      "style": "cloud-double",
+      "ranges": [
+          [36, 2],
+          [84, 2],
+          [132, 2],
+          [180, 2]
+      ]
+  },
+  {
+      "style": "cloud-triple",
+      "ranges": [
+          [27, 3],
+          [75, 3],
+          [123, 3],
+          [171, 3]
+      ]
+  },
+  {
+      "style": "bush-single",
+      "ranges": [
+          [23, 12],
+          [71, 12],
+          [119, 12],
+          [167, 12]
+      ]
+  },
+  {
+      "style": "bush-double",
+      "ranges": [
+          [41, 12],
+          [89, 12],
+          [137, 12]
+      ]
+  },
+  {
+      "style": "bush-triple",
+      "ranges": [
+          [11, 12],
+          [59, 12],
+          [107, 12]
+      ]
+  },
+  {
+      "style": "bush-3",
+      "ranges": [
+          [159, 12],
+          [207, 12]
+      ]
+  },
+  {
+      "style": "hill-small",
+      "ranges": [
+          [16, 11],
+          [64, 11],
+          [112, 11],
+          [160, 11],
+          [208, 11]
+      ]
+  },
+  {
+      "style": "hill-large",
+      "ranges": [
+          [0, 10],
+          [48, 10],
+          [96, 10],
+          [144, 10],
+          [192, 10]
+      ]
+  },
+  {
+      "style": "metal",
+      "behavior": "ground",
+      "ranges": [
+          [64, 8]
+      ]
+  },
+  {
+      "style": "bricks-top",
+      "behavior": "ground",
+      "ranges": [
+          [20, 5, 9],
+          [77, 3, 9],
+          [80, 8, 5],
+          [91, 4, 5],
+          [94, 9],
+          [100, 2, 9],
+          [118, 9],
+          [121, 3, 5],
+          [128, 4, 5],
+          [129, 2, 9],
+          [168, 4, 9]
+      ]
+  },
+  {
+      "style": "chance",
+      "behavior": "ground",
+      "ranges": [
+        [2, 2],
+          [16, 9],
+          [22, 5],
+          [21, 9],
+          [23, 9],
+          [78, 9],
+          [94, 5],
+          [106, 9],
+          [109, 5],
+          [109, 9],
+          [112, 9],
+          [129, 2, 5],
+          [170, 9]
+      ]
+  },
+  {
+      "style": "chocolate-stairs-4h",
+      "ranges": [
+          [134, 9],
+          [148, 9]
+      ]
+  },
+  {
+      "style": "chocolate-stairs-4h-reverse",
+      "ranges": [
+          [140, 9],
+          [155, 9]
+      ]
+  },
+  {
+      "style": "chocolate-stairs-final",
+      "ranges": [
+          [181, 5]
+      ]
+  },
+  {
+      "style": "chocolate-stack-4h",
+      "ranges": [
+          [152, 1, 9]
+      ]
+  },
+  {
+      "style": "flag-pole-green",
+      "ranges": [
+          [198, 2]
+      ]
+  },
+  {
+      "style": "castle-small",
+      "ranges": [
+          [202, 8]
+      ]
+  },
+  {
+      "style": "pipe-2h",
+      "ranges": [
+          [28, 11],
+          [163, 11],
+          [179, 11]
+      ]
+  },
+  {
+      "style": "pipe-3h",
+      "ranges": [
+          [38, 10]
+      ]
+  },
+  {
+      "style": "pipe-4h",
+      "ranges": [
+          [46, 9],
+          [57, 9]
+      ]
+  }
   ]
 }

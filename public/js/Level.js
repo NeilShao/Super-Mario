@@ -12,6 +12,8 @@ export default class Level {
         this.entities = new Set();
         this.tiles = new Matrix();
         this.tilesCollider = new TileCollider(this.tiles);
+
+        this.totalTime = 0;
     }
 
     update(deltaTime) {
@@ -26,5 +28,7 @@ export default class Level {
 
             entity.vel.y += this.gravity * deltaTime;
         })
+
+        this.totalTime += deltaTime;
     }
 }
