@@ -1,22 +1,26 @@
 import KeyboardStaste from './KeyboardStaste.js'
 
-export function setupKeyBoard(entity) {
+export function setupKeyBoard(mario) {
     const input = new KeyboardStaste();
-    input.addMapping('Space', keyStates => {
+    input.addMapping('KeyP', keyStates => {
         if (keyStates) {
-            entity.jump.start();
+            mario.jump.start();
         } else {
-            entity.jump.cancel();
+            mario.jump.cancel();
         }
         
     });
 
-    input.addMapping('ArrowRight', keyStates => {
-        entity.go.dir = keyStates;
+    input.addMapping('KeyO', keyStates => {
+        mario.turbo(keyStates);
     });
 
-    input.addMapping('ArrowLeft', keyStates => {
-        entity.go.dir = -keyStates;
+    input.addMapping('KeyD', keyStates => {
+        mario.go.dir += keyStates? 1: -1;
+    });
+
+    input.addMapping('KeyA', keyStates => {
+        mario.go.dir += keyStates? -1: 1;
     });
 
     return input;

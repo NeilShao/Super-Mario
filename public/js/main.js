@@ -1,6 +1,6 @@
 import Camera from './Camera.js'
 import Timer from './Timer.js'
-import { loadLevel } from './loaders.js'
+import { loadLevel } from './loaders/level.js'
 import { createMario } from './Entities.js'
 import { setupKeyBoard } from './input.js'
 import { setupMouseControl } from './debug.js' 
@@ -35,6 +35,10 @@ Promise.all([
     timer.update = function(deltaTime) {
         level.update(deltaTime);
         level.comp.draw(context, camera);
+
+        if (mario.pos.x > 100) {
+            camera.pos.x = mario.pos.x - 100;
+        }
     }
     timer.start();
 })

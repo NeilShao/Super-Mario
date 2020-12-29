@@ -8,6 +8,12 @@ export default class Entity {
         this.traits = [];
     }
 
+    obstruct(side) {
+        this.traits.forEach(trait => {
+            trait.obstruct(this, side);
+        })
+    }
+
     addTrait(trait) {
         this.traits.push(trait);
         this[trait.NAME] = trait;

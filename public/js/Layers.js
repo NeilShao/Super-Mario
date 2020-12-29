@@ -1,33 +1,27 @@
-export function createBackgrounLayer(level, sprites) {
-    const tiles = level.tiles;
-    const resolver = level.tilesCollider.tiles;
+import TileResolver from './TileResolver.js'
+
+export function createBackgrounLayer(level, tiles, sprites) {
+    const resolver = new TileResolver(tiles);
+    
 
     const buffer = document.createElement('canvas');
     buffer.width = 256 + 16;
     buffer.height = 248;
     const bufferContext = buffer.getContext('2d');
 
-    let startIndex, endIndex;
-    function redraw(drawFrom, drawTo) {
-        for (let x = drawFrom; x <= drawTo; ++x) {
-            if (startIndex === drawFrom && endIndex === drawTo) {
-                // return;
-            }
-
+    function redraw(startIndex, endIndex) {
+        for (let x = startIndex; x <= endIndex; ++x) {
             const col = tiles.grid[x];
             if (col) {
-                col.forEach((tile, y) => {
+                col.forEach((tile, y) => {                    
                     if (sprites.animations.has(tile.name)) {
-                        sprites.drawAnimationTile(tile.name, bufferContext, x - drawFrom, y, level.totalTime);
+                        sprites.drawAnimationTile(tile.name, bufferContext, x - startIndex, y, level.totalTime);
                     } else {
-                        sprites.drawTile(tile.name, bufferContext, x - drawFrom, y);
+                        sprites.drawTile(tile.name, bufferContext, x - startIndex, y);
                     }
                 }) 
             }
         }
-
-        startIndex = drawFrom;
-        endIndex = drawTo;
     }
 
     return function(context, camera) {
